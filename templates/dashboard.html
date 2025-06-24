@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">📊 Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5 class="card-title text-primary">📝 Total Posts</h5>
+                <h2 class="display-4 text-primary">{{ stats.total_posts }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h5 class="card-title text-success">📧 Total Contacts</h5>
+                <h2 class="display-4 text-success">{{ stats.total_contacts }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">📂 Categories</h5>
+            </div>
+            <div class="card-body">
+                {% if stats.categories %}
+                    {% for category, count in stats.categories.items() %}
+                        <span class="badge bg-secondary me-2 mb-1">{{ category.title() }}: {{ count }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">No categories yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">📰 Recent Posts</h5>
+            </div>
+            <div class="card-body">
+                {% if stats.recent_posts %}
+                    <div class="list-group list-group-flush">
+                        {% for post in stats.recent_posts %}
+                            <div class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">{{ post.title }}</div>
+                                    <small class="text-muted">by {{ post.author }} | {{ post.date_posted.strftime('%B %d, %Y') }}</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ post.category }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <h5>📄 No posts yet</h5>
+                        <p class="text-muted">Create your first post to get started!</p>
+                        <a href="{{ url_for('create_post') }}" class="btn btn-primary">Create Post</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h5 class="mb-0">🔗 Quick Links</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('create_post') }}" class="btn btn-success w-100 mb-2">✨ New Post</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary w-100 mb-2">🏠 View Blog</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('api_posts') }}" class="btn btn-info w-100 mb-2" target="_blank">🔌 API Posts</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('contact') }}" class="btn btn-warning w-100 mb-2">📧 Contact Form</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

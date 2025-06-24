@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="display-1 text-danger">500</h1>
+                    <h2 class="mb-3">⚠️ Server Error</h2>
+                    <p class="lead">Something went wrong on our end.</p>
+                    <p class="text-muted">We're working to fix this issue. Please try again later.</p>
+                    <div class="mt-4">
+                        <a href="{{ url_for('home') }}" class="btn btn-primary me-2">🏠 Go Home</a>
+                        <button onclick="location.reload()" class="btn btn-secondary">🔄 Refresh Page</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

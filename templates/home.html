@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-4">📝 Latest Blog Posts</h1>
+        
+        {% if posts.items %}
+            {% for post in posts.items %}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-primary">{{ post.category.title() }}</span>
+                            <small class="text-muted">{{ post.date_posted.strftime('%B %d, %Y') }}</small>
+                        </div>
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text text-muted">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                ✍️ By {{ post.author }}
+                            </small>
+                            <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-outline-primary btn-sm">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if posts.pages > 1 %}
+                <nav aria-label="Posts pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if posts.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('home', page=posts.prev_num) }}">← Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for page_num in posts.iter_pages() %}
+                            {% if page_num %}
+                                {% if page_num != posts.page %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('home', page=page_num) }}">{{ page_num }}</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if posts.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('home', page=posts.next_num) }}">Next →</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <h3>📄 No posts yet!</h3>
+                <p class="text-muted">Be the first to share something awesome.</p>
+                <a href="{{ url_for('create_post') }}" class="btn btn-primary">✨ Create First Post</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">🚀 Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('create_post') }}" class="btn btn-success mb-2 w-100">📝 Create New Post</a>
+                <a href="{{ url_for('contact') }}" class="btn btn-info mb-2 w-100">📧 Contact Us</a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-warning w-100">📊 Dashboard</a>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mt-4">
+            <div class="card-header">
+                <h6>💡 Tips</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li>• Write engaging titles</li>
+                    <li>• Use proper categories</li>
+                    <li>• Share your knowledge</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
